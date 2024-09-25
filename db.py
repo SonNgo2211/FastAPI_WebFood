@@ -1,10 +1,19 @@
-from pymongo import MongoClient
-import pymongo
-from dotenv import dotenv_values
+from sqlalchemy import create_engine
 
-# config = dotenv_values(".env")
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
 
-# conn = MongoClient(config.get("DATABASE_CONNECTION_URL"))
-conn = MongoClient('mongodb+srv://sonngo:son221101@cluster0.zjjgol6.mongodb.net/')
+URL_DATABASE = "mysql+mysqlconnector://root:son221101@localhost/webfood"
 
-db = conn["foodsell"]
+engine = create_engine(URL_DATABASE, pool_size= 10, max_overflow= 30)
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind= engine)
+
+Base = declarative_base()
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

@@ -1,11 +1,11 @@
 
 def foodEntity(item) -> dict:
     return {
-        "p_id": str(item["_id"]),
-        "fname": item["fname"],
-        "image": item["image"],
-        "category": item["category"],
-        "price": float(item["price"])
+        "p_id": item.id,  
+        "fname": item.fname,
+        "image": item.image,
+        "category": item.category,
+        "price": float(item.price)  
     }
 
 def foodsEntity(entity) -> list:
