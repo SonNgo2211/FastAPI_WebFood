@@ -1,0 +1,46 @@
+rules:
+  - id: dom-based-xss
+    mode: taint
+    message: "Detected possible DOM-based XSS. This occurs because a portion of the
+      URL is being used to construct an element added directly to the page."
+    languages:
+      - javascript
+      - typescript
+    severity: ERROR
+    pattern-sources:
+    - pattern-either:
+      - pattern: location
+      - pattern: document.location
+      - pattern: window.location
+      - pattern: document.URL
+    pattern-sinks:
+    - pattern-either:
+      - pattern: document.write(<... document.location.$W ...>)
+      - pattern: document.write(<... location.$W ...>)
+      - pattern: document.write(<...>)
+      - pattern: document.write($PAYLOAD)
+      - pattern: document.writeln($PAYLOAD)
+      - pattern: $ELEMENT.innerHTML = $PAYLOAD
+      - pattern: $JQ.html($PAYLOAD)
+    metadata:
+      cwe:
+        - "CWE-79: Improper Neutralization of Input During Web Page Generation
+          ('Cross-site Scripting')"
+      owasp:
+        - A07:2017 - Cross-Site Scripting (XSS)
+        - A03:2021 - Injection
+      references:
+        - https://owasp.org/www-community/attacks/DOM_Based_XSS
+      category: security
+      technology:
+        - browser
+      cwe2022-top25: true
+      cwe2021-top25: true
+      subcategory:
+        - audit
+      likelihood: LOW
+      impact: LOW
+      confidence: LOW
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+      vulnerability_class:
+        - Cross-Site-Scripting (XSS)
