@@ -1,12 +1,12 @@
-
 def userEntity(item) -> dict:
     return {
-        "u_id": str(item["_id"]),
-        "fullname": item["fullname"],
-        "username": item["username"],
-        "email": item["email"],
-        "password": item["password"]
+        "u_id": str(item.id),  # Dùng `id` từ MySQL thay vì `ObjectId` từ MongoDB
+        "fullname": item.fullname,
+        "username": item.username,
+        "email": item.email,
+        "password": item.password
     }
+
 
 def usersEntity(entity) -> list:
     return [userEntity(item) for item in entity]

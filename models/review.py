@@ -1,16 +1,22 @@
 from pydantic import BaseModel
-import datetime
-from db import conn
-from schemas.user import userEntity
+from sqlalchemy.orm import Session
+from db import SessionLocal
 from models.user import User
-from bson import ObjectId
+from fastapi import Depends
+
+# Kết nối với database
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 class Review(BaseModel):
     f_id: str
-    user: dict
+    user_id: int
     content: str
     time: str
-    def getUser(self):
-        return userEntity(
-            conn.foodsell.users.find_one({"_id": ObjectId(self.u_id)})
-            )
+
+    def getUser(self, db: Session):
+        return db.query(User).filter(User.id == self.user_id).first()
