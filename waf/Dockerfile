@@ -33,6 +33,14 @@ RUN make modules
 
 RUN cp objs/ngx_http_modsecurity_module.so /etc/nginx/modules/
 
+COPY nginx.conf /etc/nginx/
+
+RUN mkdir -p /etc/nginx/modsecurity/rules
+
+RUN mkdir -p /etc/nginx/modsecurity/config
+
+RUN chown -R nginx: /etc/nginx
+
 WORKDIR /
 
 USER nginx
